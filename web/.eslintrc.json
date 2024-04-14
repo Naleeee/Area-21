@@ -1,0 +1,15 @@
+{
+  "extends": "./node_modules/gts/",
+  "rules": {
+    "curly": ["error", "multi-or-nest", "consistent"],
+    "@typescript-eslint/no-explicit-any": "off",
+    "eqeqeq": "off",
+    "react/no-unescaped-entities": 0
+  },
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaVersion": 2020
+  }
+
+
+}

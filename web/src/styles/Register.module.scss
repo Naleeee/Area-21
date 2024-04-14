@@ -1,0 +1,53 @@
+div#register {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+
+  background-image: linear-gradient(-45deg, var(--color-purple), var(--color-blue));
+
+  div#backgroundRectangle {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+
+    padding: 40px;
+    border-radius: 50px;
+    background-color: var(--color-light-purple);
+
+    & > p#title {
+      font-size: 48px;
+      color: var(--color-dark-blue);
+      text-align: center;
+    }
+
+    & > form {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      gap: 25px;
+
+      & > div#login {
+        display: flex;
+        justify-content: center;
+        gap: 5px;
+        font-size: 16px;
+
+        & > p {
+          color: var(--color-dark-blue);
+        }
+      }
+
+      & > p.errorRegister {
+        border-radius: 5px;
+        border: darkred 1px solid;
+        color: darkred;
+        background-color: pink;
+        text-align: center;
+        padding: 5px;
+        width: fit-content;
+      }
+    }
+  }
+}

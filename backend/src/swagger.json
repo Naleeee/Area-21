@@ -1,0 +1,1875 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Area 21 Api",
+        "description": "the api documentation for the area21 app",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "Actions",
+            "description": "all the actions for the area"
+        },
+        {
+            "name": "Reactions",
+            "description": "all the reactions for the area"
+        },
+        {
+            "name": "Authentication",
+            "description": "all the login/register method"
+        },
+        {
+            "name": "Dashboard",
+            "description": "all the areas system"
+        },
+        {
+            "name": "Oauth",
+            "description": "all the oauth method to register app and login"
+        },
+        {
+            "name": "Services",
+            "description": "all the services method"
+        },
+        {
+            "name": "About",
+            "description": "send the configuration server"
+        }
+    ],
+    "schemes": [
+        "http"
+    ],
+    "definitions": {
+        "action": {
+            "properties": {
+                "action_id": {
+                    "type": "integer"
+                },
+                "service_id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "token_required": {
+                    "type": "boolean"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "arguments": {
+                    "type": "object"
+                }
+            }
+        },
+        "reaction": {
+            "properties": {
+                "reaction_id": {
+                    "type": "integer"
+                },
+                "service_id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "token_required": {
+                    "type": "boolean"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "arguments": {
+                    "type": "object"
+                }
+            }
+        },
+        "area": {
+            "properties": {
+                "area_id": {
+                    "type": "number"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "number"
+                },
+                "action_id": {
+                    "type": "number"
+                },
+                "reaction_id": {
+                    "type": "number"
+                },
+                "action_arguments": {
+                    "type": "object"
+                },
+                "reaction_arguments": {
+                    "type": "object"
+                },
+                "action_data": {
+                    "type": "object"
+                }
+            }
+        },
+        "oauth": {
+            "properties": {
+                "oauth_token_id": {
+                    "type": "integer"
+                },
+                "user_id": {
+                    "type": "integer"
+                },
+                "service_id": {
+                    "type": "integer"
+                },
+                "token": {
+                    "type": "string"
+                },
+                "refresh_token": {
+                    "type": "string"
+                }
+            }
+        },
+        "service": {
+            "properties": {
+                "service_id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "user": {
+            "properties": {
+                "user_id": {
+                    "type": "integer"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "paths": {
+        "/about.json": {
+            "get": {
+                "tags": [
+                    "About"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Return the server configuration in json format",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "client": {
+                                    "description": "configuration client",
+                                    "type": "object"
+                                },
+                                "server": {
+                                    "description": "configuration server",
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+        "/actions": {
+            "get": {
+                "tags": [
+                    "Actions"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Return all the actions available",
+                        "schema": {
+                            "type": "array"
+                        }
+                    },
+                    "401": {
+                        "description": "Access denied. You must specify the user token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Actions"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "service_id",
+                                "name",
+                                "token_required"
+                            ],
+                            "properties": {
+                                "service_id": {
+                                    "type": "string",
+                                    "description": "Id of the service"
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "description": "Name of the service"
+                                },
+                                "token_required": {
+                                    "type": "boolean",
+                                    "description": "if oauth token is required"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Return the new action"
+                    },
+                    "401": {
+                        "description": "Access denied. You must specify the user token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Token or missing parameters",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/actions/{id}": {
+            "get": {
+                "tags": [
+                    "Actions"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "the action id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Return specific action by the id"
+                    },
+                    "401": {
+                        "description": "Access denied. You must specify the user token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Actions"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "service_id",
+                                "name",
+                                "token_required"
+                            ],
+                            "properties": {
+                                "service_id": {
+                                    "type": "string",
+                                    "description": "Id of the service"
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "description": "Name of the service"
+                                },
+                                "token_required": {
+                                    "type": "boolean",
+                                    "description": "if oauth token is required"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "the action id to update"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Return the new action"
+                    },
+                    "401": {
+                        "description": "Access denied. You must specify the user token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Token or missing parameters",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Actions"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "the action id to delete"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "correctly deleted"
+                    },
+                    "401": {
+                        "description": "Access denied. You must specify the user token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Token or missing parameters",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "action not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/actions/serviceid/{id}": {
+            "get": {
+                "tags": [
+                    "Actions"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "the service id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Return all action by the serviceid"
+                    },
+                    "401": {
+                        "description": "Access denied. You must specify the user token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+
+        "/reactions": {
+            "get": {
+                "tags": [
+                    "Reactions"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Return all the reactions available",
+                        "schema": {
+                            "type": "array"
+                        }
+                    },
+                    "401": {
+                        "description": "Access denied. You must specify the user token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Reactions"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "service_id",
+                                "name",
+                                "token_required"
+                            ],
+                            "properties": {
+                                "service_id": {
+                                    "type": "string",
+                                    "description": "Id of the service"
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "description": "Name of the service"
+                                },
+                                "token_required": {
+                                    "type": "boolean",
+                                    "description": "if oauth token is required"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Return the new action"
+                    },
+                    "401": {
+                        "description": "Access denied. You must specify the user token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Token or missing parameters",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/reactions/{id}": {
+            "get": {
+                "tags": [
+                    "Reactions"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "the reaction id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Return specific reaction by the id"
+                    },
+                    "401": {
+                        "description": "Access denied. You must specify the user token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Reactions"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "service_id",
+                                "name",
+                                "token_required"
+                            ],
+                            "properties": {
+                                "service_id": {
+                                    "type": "string",
+                                    "description": "Id of the service"
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "description": "Name of the service"
+                                },
+                                "token_required": {
+                                    "type": "boolean",
+                                    "description": "if oauth token is required"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "the reactions id to update"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Return the new reactions"
+                    },
+                    "401": {
+                        "description": "Access denied. You must specify the user token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Token or missing parameters",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Reactions"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "the reactions id to delete"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "correctly deleted"
+                    },
+                    "401": {
+                        "description": "Access denied. You must specify the user token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Token or missing parameters",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "reactions not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/reactions/serviceid/{id}": {
+            "get": {
+                "tags": [
+                    "Reactions"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "the service id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Return all reactions by the serviceid"
+                    },
+                    "401": {
+                        "description": "Access denied. You must specify the user token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+
+        "/oauth": {
+            "get": {
+                "tags": [
+                    "Oauth"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Return all the Oauth available",
+                        "schema": {
+                            "type": "array"
+                        }
+                    },
+                    "401": {
+                        "description": "Access denied. You must specify the user token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Oauth"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "user_id",
+                                "service_id",
+                                "token",
+                                "refresh_token"
+                            ],
+                            "properties": {
+                                "user_id": {
+                                    "type": "number",
+                                    "description": "id of the user"
+                                },
+                                "service_id": {
+                                    "type": "string",
+                                    "description": "Id of the service"
+                                },
+                                "token": {
+                                    "type": "string",
+                                    "description": "the oauth token"
+                                },
+                                "refresh_token": {
+                                    "type": "string",
+                                    "description": "the oauth refresh token"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Return the new oauth"
+                    },
+                    "401": {
+                        "description": "Access denied. You must specify the user token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Token or missing parameters",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/oauth/{id}": {
+            "get": {
+                "tags": [
+                    "Oauth"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "the oauth id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Return specific oauth by the id"
+                    },
+                    "401": {
+                        "description": "Access denied. You must specify the user token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Oauth"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "user_id",
+                                "service_id",
+                                "token",
+                                "refresh_token"
+                            ],
+                            "properties": {
+                                "user_id": {
+                                    "type": "number",
+                                    "description": "id of the user"
+                                },
+                                "service_id": {
+                                    "type": "string",
+                                    "description": "Id of the service"
+                                },
+                                "token": {
+                                    "type": "string",
+                                    "description": "the oauth token"
+                                },
+                                "refresh_token": {
+                                    "type": "string",
+                                    "description": "the oauth refresh token"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "the oauth id to update"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Return the new oauth"
+                    },
+                    "401": {
+                        "description": "Access denied. You must specify the user token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Token or missing parameters",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Oauth"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "the oauth id to delete"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "correctly deleted"
+                    },
+                    "401": {
+                        "description": "Access denied. You must specify the user token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Token or missing parameters",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "oauth not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/oauth/google": {
+            "post": {
+                "tags": [
+                    "Oauth"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "email",
+                                "token",
+                                "refresh_token"
+                            ],
+                            "properties": {
+                                "email": {
+                                    "type": "string",
+                                    "description": "the email of the gmail account"
+                                },
+                                "token": {
+                                    "type": "string",
+                                    "description": "the oauth token"
+                                },
+                                "refresh_token": {
+                                    "type": "string",
+                                    "description": "the oauth refresh token"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Return the jwt token for connection in area21"
+                    },
+                    "401": {
+                        "description": "Access denied. You must specify the user token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Token or missing parameters",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/oauth/spotify": {
+            "post": {
+                "tags": [
+                    "Oauth"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "token",
+                                "refresh_token"
+                            ],
+                            "properties": {
+                                "token": {
+                                    "type": "string",
+                                    "description": "the oauth token"
+                                },
+                                "refresh_token": {
+                                    "type": "string",
+                                    "description": "the oauth refresh token"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Return the jwt token for connection in area21"
+                    },
+                    "401": {
+                        "description": "Access denied. You must specify the user token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Token or missing parameters",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/oauth/spotify/logout": {
+            "get": {
+                "tags": [
+                    "Oauth"
+                ],
+                "responses": {
+                    "204": {
+                        "description": "logout"
+                    },
+                    "401": {
+                        "description": "Access denied. You must specify the user token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Token or service not connected",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/oauth/facebook": {
+            "post": {
+                "tags": [
+                    "Oauth"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "token",
+                                "refresh_token"
+                            ],
+                            "properties": {
+                                "token": {
+                                    "type": "string",
+                                    "description": "the oauth token"
+                                },
+                                "refresh_token": {
+                                    "type": "string",
+                                    "description": "the oauth refresh token"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Return the jwt token for connection in area21"
+                    },
+                    "401": {
+                        "description": "Access denied. You must specify the user token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Token or missing parameters",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/oauth/facebook/logout": {
+            "get": {
+                "tags": [
+                    "Oauth"
+                ],
+                "responses": {
+                    "204": {
+                        "description": "logout"
+                    },
+                    "401": {
+                        "description": "Access denied. You must specify the user token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Token or service not connected",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/oauth/github": {
+            "post": {
+                "tags": [
+                    "Oauth"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "token",
+                                "refresh_token"
+                            ],
+                            "properties": {
+                                "token": {
+                                    "type": "string",
+                                    "description": "the oauth token"
+                                },
+                                "refresh_token": {
+                                    "type": "string",
+                                    "description": "the oauth refresh token"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Return the jwt token for connection in area21"
+                    },
+                    "401": {
+                        "description": "Access denied. You must specify the user token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Token or missing parameters",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/oauth/github/logout": {
+            "get": {
+                "tags": [
+                    "Oauth"
+                ],
+                "responses": {
+                    "204": {
+                        "description": "logout"
+                    },
+                    "401": {
+                        "description": "Access denied. You must specify the user token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Token or service not connected",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/oauth/todoist": {
+            "post": {
+                "tags": [
+                    "Oauth"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "token",
+                                "refresh_token"
+                            ],
+                            "properties": {
+                                "token": {
+                                    "type": "string",
+                                    "description": "the oauth token"
+                                },
+                                "refresh_token": {
+                                    "type": "string",
+                                    "description": "the oauth refresh token"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Return the jwt token for connection in area21"
+                    },
+                    "401": {
+                        "description": "Access denied. You must specify the user token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Token or missing parameters",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/oauth/todoist/logout": {
+            "get": {
+                "tags": [
+                    "Oauth"
+                ],
+                "responses": {
+                    "204": {
+                        "description": "logout"
+                    },
+                    "401": {
+                        "description": "Access denied. You must specify the user token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Token or service not connected",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/oauth/isConnected": {
+            "post": {
+                "tags": [
+                    "Oauth"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "name"
+                            ],
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "the service name"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Return json object is connected or not connected"
+                    },
+                    "401": {
+                        "description": "Access denied. You must specify the user token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Token or missing parameters",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+
+        "/dashboard": {
+            "get": {
+                "tags": [
+                    "Dashboard"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Return all the areas available",
+                        "schema": {
+                            "type": "array"
+                        }
+                    },
+                    "401": {
+                        "description": "Access denied. You must specify the user token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Dashboard"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "user_id",
+                                "action_id",
+                                "reaction_id"
+                            ],
+                            "properties": {
+                                "user_id": {
+                                    "type": "integer",
+                                    "description": "the owner id of the area"
+                                },
+                                "action_id": {
+                                    "type": "integer",
+                                    "description": "the action id of the area"
+                                },
+                                "reaction_id": {
+                                    "type": "integer",
+                                    "description": "the reaction id of the area"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                            "description": "Return the new area"
+                    },
+                    "401": {
+                        "description": "Access denied. You must specify the user token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Token or missing parameters",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/dashboard/{id}": {
+            "get": {
+                "tags": [
+                    "Dashboard"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "the dashboard id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Return specific dashboard by the id"
+                    },
+                    "401": {
+                        "description": "Access denied. You must specify the user token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Dashboard"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "title",
+                                "action_id",
+                                "reaction_id",
+                                "action_arguments",
+                                "reaction_arguments"
+                            ],
+                            "properties": {
+                                "title": {
+                                    "type": "string",
+                                    "description": "the area name"
+                                },
+                                "action_id": {
+                                    "type": "integer",
+                                    "description": "the action id"
+                                },
+                                "reaction_id": {
+                                    "type": "integer",
+                                    "description": "the reaction id"
+                                },
+                                "action_arguments": {
+                                    "type": "object",
+                                    "description": "the list of arguments for the action"
+                                },
+                                "reaction_arguments": {
+                                    "type": "object",
+                                    "description": "the list of arguments for the reaction"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "the area id to update"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Return the new area"
+                    },
+                    "401": {
+                        "description": "Access denied. You must specify the user token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Token or missing parameters",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Dashboard"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "the area id to delete"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "correctly deleted"
+                    },
+                    "401": {
+                        "description": "Access denied. You must specify the user token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Token or missing parameters",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "dashboard not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/dashboard/userid/{id}": {
+            "get": {
+                "tags": [
+                    "Dashboard"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "the user id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Return all area from the userId"
+                    },
+                    "401": {
+                        "description": "Access denied. You must specify the user token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+
+        "/users/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "email",
+                                "password"
+                            ],
+                            "properties": {
+                                "email": {
+                                    "type": "string",
+                                    "description": "the user email"
+                                },
+                                "password": {
+                                    "type": "string",
+                                    "description": "the user password"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Return email,userid and jwt token"
+                    },
+                    "400": {
+                        "description": "Email or password is missing"
+                    },
+                    "401": {
+                        "description": "Access denied. Incorrect password",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/register": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "email",
+                                "password"
+                            ],
+                            "properties": {
+                                "email": {
+                                    "type": "string",
+                                    "description": "the user email"
+                                },
+                                "password": {
+                                    "type": "string",
+                                    "description": "the user password"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Return userId, email, jwt token"
+                    },
+                    "400": {
+                        "description": "Email or password is missing"
+                    },
+                    "401": {
+                        "description": "Access denied. Incorrect password",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/updatepassword": {
+            "put": {
+                "tags": [
+                    "Authentication"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "password"
+                            ],
+                            "properties": {
+                                "password": {
+                                    "type": "string",
+                                    "description": "the user password"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "ok"
+                    },
+                    "400": {
+                        "description": "password missing or trying to change the password of oauth users"
+                    },
+                    "401": {
+                        "description": "Access denied. Incorrect password",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+
+        "/services": {
+            "get": {
+                "tags": [
+                    "Services"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Return all the services available",
+                        "schema": {
+                            "type": "array"
+                        }
+                    },
+                    "401": {
+                        "description": "Access denied. You must specify the user token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Services"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "name"
+                            ],
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "Name of the service"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Return the new service"
+                    },
+                    "401": {
+                        "description": "Access denied. You must specify the user token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Token or missing parameters",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/services/{id}": {
+            "get": {
+                "tags": [
+                    "Services"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "the service id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Return specific service by the id"
+                    },
+                    "401": {
+                        "description": "Access denied. You must specify the user token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Services"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "name"
+                            ],
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "Name of the service"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "the service id to update"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Return the new service"
+                    },
+                    "401": {
+                        "description": "Access denied. You must specify the user token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Token or missing parameters",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Services"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "the service id to delete"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "correctly deleted"
+                    },
+                    "401": {
+                        "description": "Access denied. You must specify the user token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Token or missing parameters",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "service not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

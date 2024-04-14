@@ -1,0 +1,32 @@
+{
+  "expo": {
+    "name": "Area21",
+    "slug": "Area21",
+    "scheme": "mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/AreaLogo.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/BigAreaLogo.png",
+      "backgroundColor": "#5DB3E8"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/AreaLogo.png"
+      }
+    },
+    "web": {
+      "favicon": "./assets/AreaLogo.png"
+    }
+  }
+}

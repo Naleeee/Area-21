@@ -1,0 +1,38 @@
+{
+  "name": "web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev -p 8081",
+    "start": "next start -p 8081",
+    "clean": "gts clean",
+    "fix": "gts fix",
+    "lint": "gts lint"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@mui/material": "^5.11.6",
+    "@next/font": "13.1.4",
+    "axios": "^1.2.6",
+    "eslint": "8.32.0",
+    "eslint-config-next": "13.1.4",
+    "flatlist-react": "^1.5.8",
+    "next": "13.1.4",
+    "next-auth": "^4.18.8",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-select": "^5.7.0",
+    "sass": "^1.57.1"
+  },
+  "devDependencies": {
+    "@types/node": "18.11.18",
+    "@types/react": "18.0.27",
+    "@types/react-dom": "18.0.10",
+    "@typescript-eslint/eslint-plugin": "^5.53.0",
+    "gts": "^3.1.1",
+    "prettier": "2.8.3",
+    "typescript": "4.9.5"
+  }
+}

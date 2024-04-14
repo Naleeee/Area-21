@@ -1,0 +1,17 @@
+.link {
+    text-decoration: underline;
+    color: var(--color-light-dark-blue);
+
+    &:hover {
+        color: var(--color-purple);
+    }
+}
+
+.basic {
+    color: var(--color-dark-blue);
+}
+
+.disabled {
+    cursor: not-allowed;
+    color: gray;
+}

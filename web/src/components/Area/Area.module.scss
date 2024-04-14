@@ -1,0 +1,32 @@
+div.area {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 300px;
+    height: 200px;
+    border-radius: 15px;
+    color: white;
+    background-color: var(--color-purple);
+    border: none;
+    outline: none;
+    font-size: 20px;
+    padding: 30px 35px;
+
+    & > p {
+        color: var(--color-white);
+        font-size: 32px;
+        font-weight: 600;
+        height: 160px;
+    }
+    & > div {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+
+        & > button {
+            background-color: transparent;
+            outline: none;
+            border: none;
+        }
+    }
+}
